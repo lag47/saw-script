@@ -2941,7 +2941,7 @@ translateSimplImpl (ps0 :: Proxy ps0) mb_simpl m = case mbMatch mb_simpl of
        let prxs2 = mbRAssignProxies ps2
        let prxs_in = RL.append prxs1 prxs2 :>: Proxy
        pctx <- itiPermStack <$> ask
-       let (pctx_ps, pctx12 :>: ptrans_l) = RL.split ps0 prxs_in pctx
+       (pctx_ps, pctx12 :>: ptrans_l) <- pure $ RL.split ps0 prxs_in pctx
        let (pctx1, pctx2) = RL.split prxs1 prxs2 pctx12
 
        -- Also split out the input variables and replace them with the ps_out vars
@@ -2955,10 +2955,10 @@ translateSimplImpl (ps0 :: Proxy ps0) mb_simpl m = case mbMatch mb_simpl of
        let fromJustOrError (Just x) = x
            fromJustOrError Nothing = error "translateSimplImpl: SImpl_MapLifetime"
            ps_in'_vars =
-             RL.map (translateVar . getCompose) $ mbRAssign $ 
+             RL.map (translateVar . getCompose) $ mbRAssign $
              fmap (fromJustOrError . exprPermsVars) ps_in'
            ps_out_vars =
-             RL.map (translateVar . getCompose) $ mbRAssign $ 
+             RL.map (translateVar . getCompose) $ mbRAssign $
              fmap (fromJustOrError . exprPermsVars) ps_out
        impl_in_tm <-
          translateCurryLocalPermImpl "Error mapping lifetime input perms:" impl_in
@@ -4946,7 +4946,7 @@ tcTranslateAddCFGs sc mod_name env checks endianness dlevel cfgs_and_perms =
        applyOpenTerm (globalOpenTerm "Prelude.lrtTupleType") lrts
      tup_fun_tm <- completeNormOpenTerm sc $
        applyOpenTermMulti (globalOpenTerm "Prelude.multiFixM") [lrts, tup_fun]
-     scInsertDef sc mod_name tup_fun_ident tup_fun_tp tup_fun_tm 
+     scInsertDef sc mod_name tup_fun_ident tup_fun_tp tup_fun_tm
      new_entries <-
        zipWithM
        (\cfg_and_perm i ->

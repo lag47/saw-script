@@ -43,3 +43,7 @@ source-repository-package
     type: git
     location: https://github.com/eddywestbrook/hobbits.git
     tag: e49911ce987c4e0fea8c63608d16638b243b051f
+
+-- TODO: Remove this once https://github.com/ivan-m/graphviz/pull/53 lands
+allow-newer:
+  graphviz:bytestring

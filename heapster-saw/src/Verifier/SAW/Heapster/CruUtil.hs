@@ -1,3 +1,4 @@
+{-# LANGUAGE EmptyCase #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE QuasiQuotes #-}
@@ -737,6 +738,7 @@ cruCtxLen (CruCtxCons ctx _) = 1 + cruCtxLen ctx
 
 -- | Look up a type in a 'CruCtx'
 cruCtxLookup :: CruCtx ctx -> Member ctx a -> TypeRepr a
+cruCtxLookup CruCtxNil m = case m of {}
 cruCtxLookup (CruCtxCons _ tp) Member_Base = tp
 cruCtxLookup (CruCtxCons ctx _) (Member_Step memb) = cruCtxLookup ctx memb
 

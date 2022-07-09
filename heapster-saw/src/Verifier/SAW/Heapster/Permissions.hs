@@ -2206,7 +2206,7 @@ mbRangeFTDelete
     bvRangeDelete rng1 rng2
 mbRangeFTDelete mb_rng _ = [mb_rng]
 
--- | Delete all ranges in any of a list of ranges from 
+-- | Delete all ranges in any of a list of ranges from
 mbRangeFTsDelete :: [MbRangeForType a] -> [MbRangeForType a] ->
                     [MbRangeForType a]
 mbRangeFTsDelete rngs_l rngs_r =
@@ -3053,6 +3053,7 @@ addPermOffsets (LLVMPermOffset off1) (LLVMPermOffset off2) =
 
 -- | Get the @n@th expression in a 'PermExprs' list
 nthPermExpr :: PermExprs args -> Member args a -> PermExpr a
+nthPermExpr PExprs_Nil m = case m of {}
 nthPermExpr (PExprs_Cons _ arg) Member_Base = arg
 nthPermExpr (PExprs_Cons args _) (Member_Step memb) =
   nthPermExpr args memb
@@ -3060,6 +3061,8 @@ nthPermExpr (PExprs_Cons args _) (Member_Step memb) =
 -- | Set the @n@th expression in a 'PermExprs' list
 setNthPermExpr :: PermExprs args -> Member args a -> PermExpr a ->
                   PermExprs args
+setNthPermExpr PExprs_Nil m _ =
+  case m of {}
 setNthPermExpr (PExprs_Cons args _) Member_Base a =
   PExprs_Cons args a
 setNthPermExpr (PExprs_Cons args arg) (Member_Step memb) a =
@@ -7088,6 +7091,7 @@ permVarSubstToNames PermVarSubst_Nil = MNil
 permVarSubstToNames (PermVarSubst_Cons s n) = permVarSubstToNames s :>: n
 
 varSubstLookup :: PermVarSubst ctx -> Member ctx a -> ExprVar a
+varSubstLookup PermVarSubst_Nil m = case m of {}
 varSubstLookup (PermVarSubst_Cons _ x) Member_Base = x
 varSubstLookup (PermVarSubst_Cons s _) (Member_Step memb) =
   varSubstLookup s memb
